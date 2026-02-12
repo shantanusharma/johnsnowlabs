@@ -6,419 +6,417 @@ seotitle: Generative AI Lab | John Snow Labs
 title: Release Notes
 permalink: /docs/en/alab/release_notes
 key: docs-training
-modify_date: "2025-11-27"
+modify_date: "2026-02-11"
 use_language_switcher: "Python-Scala"
 show_nav: true
 sidebar:
   nav: annotation-lab
 ---
 
-## Generative AI Lab 7.7: End-to-End PDF De-Identification for Visual NER
+<div class="h3-box" markdown="1">
 
-Generative AI Lab **7.7** delivers major improvements across **data privacy, evaluation workflows, annotation usability, and analytics clarity**. This release significantly expands **Visual NER de-identification** to fully support PDFs and images, introduces **ranking for multi-LLM blind evaluations**, and improves everyday annotation workflows with smarter defaults and a more compact review experience.
+## Generative AI Lab 7.8: HIPAA-Compliant Audit Logging 
 
-In addition to new features, 7.7 includes **UI/UX refinements**, **analytics dashboard improvements**, and a broad set of **stability and reliability fixes**, helping teams scale secure, compliant, and efficient human-in-the-loop workflows with greater confidence.
+Generative AI Lab **7.8** brings **HIPAA-compliant audit logging** to the platform alongside a series of usability improvements across NER, Visual NER, and PDF annotation workflows.
 
-## Support De-Identification for Visual NER Projects
+The headline feature is the new **Audit Logs Dashboard**, which gives administrators centralized, real-time visibility into user activity, data exports, project lifecycle events, and API behavior,  directly supporting compliance, security, and operational transparency requirements.
 
-Generative AI Lab **7.7.0** introduces **De-Identification for Visual NER projects**, enabling secure and compliant processing of **images and PDFs** containing sensitive information. This release extends Visual NER to  support **clinical and document-centric de-identification workflows** across the entire project lifecycle, from import and pre-annotation to review and export.
+Beyond auditing, this release delivers improvements to Visual NER document navigation, more reliable pre-annotation deployment feedback, clearer test outcome reporting in the Playground, smarter comment navigation during review, and responsive analytics charts for smaller screens. A broad set of bug fixes addresses issues across imports, annotation, integrations, and system stability.
 
-This enhancement allows teams to confidently process **PHI/PII** in visual documents while supporting regulatory and compliance requirements such as **HIPAA**.
+## Audit Logs Dashboard: System-Wide Activity Tracking for Regulated Environments
+**What's New**
 
-## What’s New
+Generative AI Lab 7.8 introduces the **Audit Logs Dashboard**, a HIPAA-compliant auditing solution that gives administrators real-time, granular visibility into all platform activity. Every user action, data access event, export, and API call is logged with timestamps and user attribution, providing the traceability that regulated environments demand.
 
--   Introduced a new **Visual NER – De-Identification** project type
--   End-to-end **de-identification support for Images and PDFs**
--   Integrated **clinical de-identification pipeline** for visual data
--   Support for both **NER model–based** and **rule-based** de-identification methods
--   De-identification applied consistently across:
-    -   Task creation
-    -   Pre-annotation
-    -   Review and comparison
-    -   Export-Sensitive entities are **masked or replaced** consistently throughout the workflow.
+![Project Lifecycle Dashboard showing created and deleted projects alongside project and task export history](/assets/images/annotation_lab/7.8/1.png)
+*<center>The Project Lifecycle Dashboard displays created and deleted projects alongside project-level and task-level export history, each with timestamps and user attribution.</center>*
 
-![77image](/assets/images/annotation_lab/7.7/1.gif)
+The dashboard is organized into purpose-built views that surface different aspects of platform activity:
 
-## Technical Details
-### Project & Pipeline Setup
--   Added a dedicated **Visual NER De-Identification** project type
--   Enabled deployment of the visual de-identification pipeline directly in the UI
--   Pipeline supports clinical NER models, custom NER models and rule-based de-identification
+- **Project lifecycle tracking** -monitors project creation, deletion, and export activity across the platform
+- **User behavior analysis** -ranks users by request volume, visualizes usage patterns by hour and day, and tracks per-project activity over time
+- **API and system monitoring** -captures API usage trends, HTTP response codes, and platform-wide usage heatmaps
+- **Flexible filtering** -narrows any view by project, user, event type, or date range to support targeted investigations
 
-![77image](/assets/images/annotation_lab/7.7/2.gif)
-*Project configuration for PDF in Visual NER De-Identification project*
 
-![77image](/assets/images/annotation_lab/7.7/3.png)
-*Project configuration for IMAGE in Visual NER De-Identification project*
 
-### Supported Models & Rules
--   Out-of-the-box support for:
-    -   Clinical PHI detection models
-    -   Generic NER models (names, locations, IDs)
--   Rule-based detection for:
-    -   Phone numbers
-    -   Emails
-    -   IDs
-    -   Dates
--   Models and rules can be combined for improved accuracy
 
-### Export Control
--   Added an **“Export Only De-Identified”** option
-    -   Exports only masked images or PDFs
-    -   Original raw files are excluded to prevent data leakage
--   Export format always matches the project type
--   Image-based projects export **de-identified images**
--   PDF-based projects export **de-identified PDFs**
+![User Behavior & Access Dashboard showing request volume per user, usage heatmaps, and monthly project activity](/assets/images/annotation_lab/7.8/2.png)
+*<center>The User Behavior & Access Dashboard surfaces request volume per user, platform usage heatmaps by hour and day, and monthly project activity breakdowns.</center>*
 
-![77image](/assets/images/annotation_lab/7.7/4.gif)
+**Technical Details**
 
-### Configuration Improvements
--   Added XML flags to distinguish between **image** and **PDF** Visual NER projects
--   Ensured outputs are routed to the correct storage and export handlers
--   Removed de-identification options not applicable to Visual NER
+Under the hood, the Audit Logs Dashboard relies on an Elasticsearch backend to index and query event data. It is designed to operate transparently alongside existing platform services -once enabled, it begins capturing events without requiring changes to user workflows or project configurations.
 
-## UX & Review Enhancements
--   **Live de-identification preview**
-    -   Reviewers can verify masked images or PDFs before exporting
--   Clear visual indicators for:
-    -   De-identified content
-    -   Export-safe outputs
+- **Activity Tracking:** All critical system events are logged with timestamps tied to specific users, covering actions, data access, modifications, deletions, and exports
+- **Data Retention:** Audit log retention is user-configurable, allowing organizations to align with internal policies and regulatory requirements
+- **Dashboards & Visualizations:** Built-in views include project activity trends, new/deleted project tracking, export monitoring, API usage charts, HTTP status distributions, and user activity tables
+- **Customizable Views:** Each dashboard panel supports filtering by project, user, event type, and date range for targeted audit reports
+- **Enablement:** Audit logging is enabled globally via an installer flag; the Elasticsearch backend is automatically provisioned if not already present
 
-### Performance Details
--   **Default Infrastructure:** `t3.2xlarge` (2 vCPU, 16 GB RAM)
--   **Processing Time:** ~20 minutes for 100 visual tasks
+**Steps to Enable During Installation**
 
-- *Note:
-— Performance may vary based on PDF page count and the number of detected entities*
+1. Run the installer with the audit logs flag:
 
-### User Benefits
--   Secure handling of PHI/PII in visual documents   
--   Complete de-identification workflow for images and PDFs  
--   Safe exports containing only de-identified outputs  
--   Visual validation before data sharing  
--   Seamless integration with existing Visual NER workflows
--   Predictable performance for enterprise-scale processing
+```bash
+./annotationlab-installer.sh --enable-audit-logs
+```
+2.	The system automatically provisions the necessary backend services (including Elasticsearch) if not already present.
 
-### Example Use Case
-A healthcare compliance team uploads scanned medical reports (PDFs) and patient intake forms (images) into a **Visual NER De-Identification** project. Using the clinical pipeline and rule-based detection, patient names, IDs, and contact details are automatically masked. Reviewers validate the results using live preview and export only the **de-identified PDFs and images** for analytics, audits, and regulatory submissions.
+**Steps to Enable During Upgrade**
 
-### Notes & Recommendations
--   Ensure the de-identification pipeline is deployed before task creation.
--   Use PDF projects for multi-page documents to preserve structure.
--   Review live preview carefully for edge cases such as handwritten text or low-quality scans.
+1.	Run the updater with the audit logs flag:
 
-### Multi-LLM Ranking for Blind Evaluation Comparison Projects
-Evaluators can now rank individual responses generated for the same prompt, making it easier to express relative preference and compare model performance when more than two LLMs are involved.
+```bash
+./annotationlab-updater.sh --enable-audit-logs
+```
+2.	Existing services are updated, and audit logging is enabled without affecting existing data or configurations.
 
-#### Technical Details
+**User Benefits**
 
-- **Built-in Ranking Capability:**  Ranking is enabled by default in **Blind LLM Response Comparison** projects and does not require any additional setup. During evaluation, each response associated with the same prompt can be assigned a rank (such as 1st, 2nd, 3rd), allowing evaluators to clearly express preference among multiple LLM outputs.
+- **HIPAA Compliance:** Track access to PHI, modifications, and data exports for regulatory readiness
+- **Transparency & Accountability:** Full visibility into user actions across projects and the platform
+- **Faster Troubleshooting:** Quickly identify the root cause of issues or suspicious activity
+- **Data-Driven Insights:** Monitor platform usage, detect anomalies, and optimize resource planning
+- **Easy Enablement:** A single installer flag activates audit logging with automatic backend provisioning
 
-![77image](/assets/images/annotation_lab/7.7/5.gif)
+**Example Use Case**
 
-- **Required by Default, Configurable by Design:**  Rankings are mandatory by default to ensure every response is evaluated consistently. This requirement is controlled through the project configuration using the `required="true"` attribute. Project Managers can update this value to `false` if rankings should be optional for a specific workflow or evaluation style.
+A compliance officer can use the Audit Logs Dashboard to investigate a spike in project deletions:
+1. Filter by project and date range to identify affected projects
+2. See which user performed each deletion and when
+3. Check for corresponding exports or modifications
+4. Review system-level activity to confirm whether the behavior was expected or anomalous
 
-![77image](/assets/images/annotation_lab/7.7/6.png)
-
-- **Seamless Workflow Integration:**  The ranking feature is fully integrated into the existing Blind Evaluation flow. Evaluators simply select ranks while reviewing responses, with no changes to task navigation, submission flow, or project setup. This ensures that the the existing evaluation workflow remains unchanged.
-
-#### User Benefits
-
-- **Clearer comparisons:** Rankings provide a direct way to express which responses are better or worse across multiple LLMs.
-- **Consistent evaluations:** Mandatory rankings ensure that all responses are fully assessed.
-- **Minimal setup:** The feature works out of the box without requiring changes to project configuration.
-- **Scalable reviews:** Supports meaningful evaluation when comparing more than two LLMs.
-
-#### Example Use Case
-
-A team evaluates responses from four different LLMs for the same medical question in a Blind LLM Response Comparison project. During review, the evaluator ranks the responses from best to worst based on accuracy and clarity. These rankings are then used to identify which models consistently perform better across prompts, without revealing model identities during annotation.
-
----
+This workflow provides full visibility, accountability, and compliance assurance, reducing risk and simplifying investigations in regulated healthcare environments.
 
 ## Improvements
 
-### Improved Default Annotation Experience with Sticky Label Layout
+### Pipelines Now Scoped to Their Originating Project Type
 
-**What’s Improved**
+**What's Improved**
 
-The **Horizontal Sticky Layout** is now enabled by default for newly created annotation projects. This ensures that labels and classification options remain visible while annotating large or scroll-heavy tasks.
-
-![77image](/assets/images/annotation_lab/7.7/7.png)
+The pre-annotation modal now only lists servers and pipelines that were deployed within the same project type. Previously, a server deployed in one project type (e.g., Visual NER) would also appear as an available option in the pre-annotation modal of other project types (e.g., NER), which could lead to confusion and accidental selection of an incompatible pipeline. With this change, opening the pre-annotation modal in an NER project will only show NER-compatible resources, and the same applies to Visual NER and other project types.
 
 **Technical Details**
 
-- The default **Task View** for new projects is set to **Horizontal – Sticky Layout**
-- The change is applied at **project creation time**
-- Applicable to **NER projects** and **all annotation projects that use labels**
-- Existing projects retain their previously configured layout settings
+-   Pipeline visibility is restricted to the project type where the deployment was performed.
+-   Cross-project-type pipeline listing has been removed.
+-   The filtering logic is applied consistently across all deployment and selection workflows.
 
-![77image](/assets/images/annotation_lab/7.7/8.png)
+![Cluster page showing all deployed pre-annotation servers](/assets/images/annotation_lab/7.8/7.png)
+*<center>The Cluster page lists all deployed pre-annotation servers.</center>*
+
+![Pre-Annotate dialog showing only the server compatible with the current project type](/assets/images/annotation_lab/7.8/8.png)
+*<center>The Pre-Annotate dialog displays only servers compatible with the current project type, preventing incompatible pipeline selection.</center>*
 
 **User Benefits**
 
-- Eliminates the need to repeatedly scroll to access labels
-- Improves annotation speed and focus for large tasks
-- Provides a better out-of-the-box experience without requiring manual configuration
+-   **Reduced errors:** Prevents accidental selection of incompatible pipelines.
+-   **Clearer workflow:** Users see only pipelines relevant to the project type they are working in.
+-   **Better consistency:** Maintains clear separation between NER, Visual NER, and other project workflows.
 
 **Example Use Case**
 
-A user annotating a long clinical document or large text file can scroll through the content while the label panel remains fixed and accessible, allowing continuous and efficient labeling without interruptions.
+A user deploys a Visual NER server for preannotation or OCR of PDF documents. When working in an NER project, this pipeline will no longer appear in the pre-annotation selection list, ensuring that only compatible pipelines are available for use.
 
-### Enhance Completion Workflow with Scrollable User Completions
+### Pre-Annotation Deployment Now Shows Continuous Progress Feedback
 
-**What’s Improved**
+**What's Improved**
 
-The completion list in the **Version tab** of the annotation widget now supports **scrolling within each annotator’s completion section**. This allows multiple completions from the same user to be accessed without expanding or scrolling the entire page.
-
-![77image](/assets/images/annotation_lab/7.7/9.gif)
+Previously, clicking **Deploy** in the pre-annotation modal would immediately close the dialog, leaving users with no indication of whether the server was still starting up. The modal now remains open throughout the deployment process, displaying real-time status updates until the server is  ready.
 
 **Technical Details**
 
-- A **vertical scrollbar** is added inside each annotator’s accordion in the Version tab
-- Due to limited vertical space, the UI displays **up to 3 completions per annotator by default**
-- If an annotator has more than 3 submitted completions, the remaining completions can be accessed via **in-panel scrolling**
-- This change applies to the **right-side annotation widget** where the Version tab is displayed
+- The pre-annotation pop-up remains visible while the server is initializing, instead of closing immediately after deployment is triggered.
+- If the pop-up is manually closed, the **Pre-Annotate** button displays a loading indicator to reflect the ongoing deployment state.
+- The button remains interactive and automatically updates once the server is ready, reappearing in its active state to indicate availability.
+- UI state handling has been refined to ensure accurate synchronization between deployment progress and user-facing indicators.
+
+![Pre-annotation pop-up remaining open during server deployment](/assets/images/annotation_lab/7.8/10.gif)
+*<center>The pre-annotation pop-up remains open during server initialization, providing continuous deployment progress feedback.</center>*
 
 **User Benefits**
 
-- Improves readability and navigation in areas with limited vertical space
-- Allows quick comparison of completions across multiple annotators
-- Reduces excessive page scrolling and keeps the Version tab compact and usable
+- Clear, continuous visibility into pre-annotation deployment status.
+- Reduced confusion about whether deployment is still in progress.
+- Consistent and accurate UI feedback, even if the pop-up is closed.
+- Smoother and more transparent pre-annotation workflow.
 
 **Example Use Case**
 
-In a project where multiple annotators submit several completions for the same task, the reviewer can view up to three recent completions per annotator at a glance and scroll within a specific annotator’s section to review additional submissions, without losing visibility of other annotators’ work.
+A user triggers pre-annotation on a large project and monitors the deployment process. While the server is starting, the pop-up remains open to show progress. If the user closes the pop-up to continue working elsewhere, the **Pre-Annotate** button clearly indicates that deployment is still in progress and updates automatically once the server is ready.
 
-### Disable New File Import Actions During Ongoing Import
-**What’s Improved:**  
-File import behavior has been updated to prevent users from starting a new import while another import is already in progress. Previously, users could trigger multiple imports simultaneously or reopen the file selection dialog, which could lead to confusion or inconsistent states.
+### Playground Now Reports Pre-Annotation Test Outcomes
 
-With this improvement, the system now ensures that only one import process runs at a time.
+**What's Improved**
 
-**Technical Details:**
-
--   File import actions remain **disabled** while an import is in progress.
--   Users cannot open the **file selection dialog** until the current import completes.
--   Import buttons are automatically **re-enabled** once the ongoing import finishes successfully.
--   The restriction is handled entirely at the **UI level** to ensure a smooth and predictable experience.
-
-![77image](/assets/images/annotation_lab/7.7/10.gif)
-
-**User Benefits:**
--   **Prevents accidental multiple imports** during long-running upload processes. 
--   **Improves stability** by avoiding overlapping import operations.  
--   **Clear user feedback** by visually disabling import actions until completion. 
--   **Simpler workflow** with reduced chances of user error.
-
-**Example Use Case:**
-A user starts importing a large dataset into a project. While the import is processing, the file upload and import options remain disabled, preventing the user from starting another import until the current one completes successfully.
-
-### Pagination for Project List in Local Import and Export
-**What’s Improved:**  
-To improve stability and performance during local Import and Export operations, pagination has been introduced for the project selection list. This enhancement prevents issues caused by loading a large number of projects simultaneously and ensures a smoother workflow.
-
-Previously, all projects were loaded in a single view, which could lead to UI exceptions and performance degradation when handling large datasets.
-
-**Technical Details**
--   Pagination has been implemented for the project list displayed in **local Import** and **local Export** workflows.    
--   Projects are now loaded in smaller, manageable batches instead of all at once.
--   This change prevents UI exceptions and reduces memory and rendering overhead. 
--   The behavior is applied consistently across both Import and Export flows.
-
-![77image](/assets/images/annotation_lab/7.7/11.gif)
-
-**User Benefits**
-
--   **Improved stability:** Prevents crashes and UI exceptions during Import/Export.  
--   **Better performance:** Faster load times and smoother navigation.
--   **Scalability:** Reliable handling of environments with a large number of projects.  
--   **Enhanced user experience:** Cleaner, more responsive project selection interface.
-    
-**Example Use Case**
-
-An admin managing hundreds of projects initiates a local export. Instead of loading all projects at once and encountering performance issues, the project list now loads page by page, allowing smooth selection and a successful export process.
-
-### Blind Evaluation Rating Experience Enhancements
-
-This release significantly improves the **rating experience in Blind Evaluation Comparison projects** by introducing a more compact, intuitive **star-based ratings widget**, improving usability on **low-resolution and zoomed-in screens**, and enforcing **rating immutability after submission** to prevent user confusion.
-
-Together, these updates deliver a clearer, more consistent, and more reliable evaluation workflow while preserving the integrity of submitted results.
-
-![77image](/assets/images/annotation_lab/7.7/12.png)
+The Playground now provides clear, immediate feedback when a pre-annotation test finishes. Users are explicitly notified whether the test succeeded with results, completed without producing any matches, or failed -removing ambiguity that previously required manual inspection to resolve.
 
 **Technical Details**
 
-- **Star-Based Ratings Widget (Default)**
-  - Replaced the previous choice-based rating input with a **compact star-based selector**
-  - Enabled by default in **Blind Evaluation Comparison projects**
-  - Each star rating includes a **descriptive tooltip**, allowing evaluators to understand the meaning of each score without cluttering the UI
-  - Tooltip styling has been refined, including a **transparent background** for improved readability and visual consistency
+The Playground displays outcome-based status notifications after a pre-annotation run finishes. The system evaluates the execution result and surfaces a contextual message using color-coded visual cues:
 
-- **Responsive Single-Line Rating Layout**
-  - Ratings are now rendered on a **single line** in standard and moderately constrained screen resolutions
-  - Reduced excessive padding and visual weight of rating elements for a cleaner, more compact layout
-  - In **very low-resolution or heavily zoomed-in states**, multiline wrapping may still occur and is expected to maintain usability
+- A **green success message** is shown when pre-annotation completes and generates results.
+- An **orange informational message** appears when pre-annotation completes successfully but no annotations are found.
+- A **red failure message** is displayed when the pre-annotation process fails.
 
-- **Immutable Ratings After Submission**
-  - Once a Blind Evaluation task is submitted, **ratings are locked and cannot be modified**
-  - Prevents scenarios where users could interact with ratings that could not be saved
-  - Ensures consistency between visible UI state and persisted evaluation data
+![Playground showing a green success notification after a successful pre-annotation test](/assets/images/annotation_lab/7.8/5.png)
+*<center>A green "Pre-Annotated Successfully" message confirms the test completed and generated annotation results.</center>*
+
+![Playground showing an orange notification when pre-annotation completes with no matches](/assets/images/annotation_lab/7.8/6.png)
+*<center>An orange "No annotations found" message indicates the test completed successfully but produced no results for the given input.</center>*
+
+These notifications appear immediately upon completion and do not alter the existing pre-annotation execution flow or configuration.
 
 **User Benefits**
 
-- **Clearer and faster evaluations** through an intuitive, compact star-based rating interface
-- **Reduced visual clutter** and improved readability, especially in constrained screen environments
-- **Improved confidence and trust** in the evaluation process by preventing misleading post-submission edits
-- **Consistent rating semantics** via tooltip-based descriptions without overloading the UI
+- Clear visibility into whether a pre-annotation test produced results, found nothing, or failed.
+- Faster decision-making about whether to proceed, adjust the input text, or troubleshoot.
+- Reduced confusion when a test completes but produces no output.
+- Improved confidence when experimenting with models, rules, or prompts in the Playground.
 
 **Example Use Case**
 
-An evaluator reviewing responses from multiple LLMs in a Blind Evaluation Comparison project rates each response using the new star-based widget. Hovering over the stars reveals concise descriptions that clarify the meaning of each score. On a laptop with limited screen resolution, all ratings remain aligned on a single line.
+A user runs a pre-annotation test in the Playground to validate a model before adding it to a project. Once the test completes, the Playground clearly indicates the outcome -confirming success with generated results, signaling a successful run with no matches, or highlighting a failure -allowing the user to immediately decide the next step.
 
+### Click-to-Navigate Behavior for Comments
 
-### Analytics Dashboard Updates
-**What’s New**
+**What's Improved**
 
-Version 7.7.0 introduces a set of visual and usability improvements to the **Analytics Dashboard**, making charts easier to read, more interactive, and more informative. These updates apply across analytics views and are not limited to a single project type.
+Clicking on a comment now automatically scrolls to and highlights the exact location in the task where the comment was originally placed. This eliminates the need to manually search through a document to find the content a comment refers to, making review workflows significantly faster.
 
 **Technical Details**
 
-- **Clearer Chart Context and Labels**
-  Analytics charts now include descriptive titles and subtitles, along with clearly labeled X-axis and Y-axis values. Tooltips have been added to the relevant charts throughout the dashboard to display additional details on hover, reducing ambiguity and improving interpretability.
-  
-![77image](/assets/images/annotation_lab/7.7/13.png)
+- Comment click behavior now includes positional mapping between comments and their associated content.
+- When a comment is selected, the system scrolls to the corresponding section in the task.
+- The relevant text or area is brought into view and visually highlighted to clearly indicate the comment's context.
+- This enhancement applies to previously added comments without requiring any data migration or user action.
 
-- **Improved Chart Types for Comparative Analysis**
-  In the **LLM Response Comparison** section, vertical bar charts have been replaced with horizontal grouped bar charts. This layout improves readability when comparing multiple models and labels. Bars representing zero values are now hidden to reduce visual noise and keep the focus on meaningful data.
-  
-![77image](/assets/images/annotation_lab/7.7/14.gif)
-
-- **Enhanced Interactive Visuals**
-  Donut charts across the Analytics page have been replaced with interactive pie charts. These charts respond to hover actions by highlighting individual segments and displaying relevant values, enabling more intuitive exploration of proportions and distributions.
-  
-![77image](/assets/images/annotation_lab/7.7/15.gif)
+![Clicking a comment automatically navigates to and highlights the referenced section](/assets/images/annotation_lab/7.8/11.gif)
+*<center>Clicking a comment scrolls the task view to the exact location where the comment was placed and highlights the referenced content.</center>*
 
 **User Benefits**
 
-- Clearer understanding of analytics through improved titles, labels, and tooltips.
-- Better visual comparison across datasets, labels, and models.
-- Reduced clutter in charts by hiding zero-value data points.
-- More engaging analysis experience with interactive and responsive visuals.
+- Instant navigation to the content a comment refers to, without manual searching.
+- Improved review and collaboration experience, especially in long documents.
+- Reduced confusion when navigating tasks with multiple comments.
+- Works with existing comments -no migration or reconfiguration needed.
 
 **Example Use Case**
 
-A project manager opens the Analytics Dashboard to assess annotation quality and distribution across tasks. The updated charts immediately provide clearer context through improved labels and subtitles. Horizontal grouped bar charts make it easier to compare categories at a glance, while interactive pie charts allow the reviewer to hover over segments to see exact values. These improvements help the reviewer quickly identify patterns and insights, regardless of the underlying project type.
+During task review, a user clicks on a comment discussing an issue in a specific section of the document. Instead of manually scrolling to locate the referenced content, the system automatically navigates to and highlights the exact section, allowing the user to immediately understand and act on the feedback.
 
----
+### Responsive Analytics Charts for Smaller Screens
+
+**What's Improved**
+
+Analytics charts now render correctly on smaller screens and laptops. Chart elements that previously overlapped in constrained viewports -such as labels, legends, and chart regions -are now displayed clearly at standard zoom levels, maintaining readability and visual consistency.
+
+**Technical Details**
+
+The layout and spacing logic for Analytics charts has been refined to better adapt to smaller screen sizes. Chart regions, labels, legends, and visual elements now adjust dynamically to the available screen space, preventing overlap and preserving the intended structure of each visualization.
+
+![Analytics charts adapting responsively to a smaller viewport](/assets/images/annotation_lab/7.8/9.gif)
+*<center>Analytics chart elements now adjust dynamically to smaller viewports, preventing label and legend overlap.</center>*
+
+**User Benefits**
+
+- Clear and readable charts on smaller screens and laptops.
+- No overlapping labels, legends, or chart regions at normal zoom levels.
+- More reliable analytics viewing without needing manual zoom or window resizing.
+- Consistent visual experience across devices.
+
+**Example Use Case**
+
+A user reviews analytics on a laptop or a smaller monitor. With the updated responsive behavior, all chart elements are clearly visible and properly spaced, allowing users to interpret metrics without adjusting the zoom or switching devices.
+
+### Scrollbar Navigation for Visual NER Documents
+
+**What's Improved**
+
+The Visual NER document viewer now includes both horizontal and vertical scrollbars, making it easier to navigate large or high-resolution documents without relying solely on the drag-to-reposition feature.
+
+**Technical Details**
+
+The visual document viewer now supports native horizontal and vertical scrolling. Scrollbars appear automatically for documents that extend beyond the visible viewport, enabling smooth navigation in all directions. This enhancement works alongside existing interaction features and does not change the underlying document rendering or annotation behavior.
+
+![Horizontal and vertical scrollbars in the Visual NER document viewer](/assets/images/annotation_lab/7.8/3.gif)
+*<center>The Visual NER document viewer now supports horizontal and vertical scrollbars for easier navigation of large documents.</center>*
+
+**User Benefits**
+
+- Easier and more intuitive navigation for large or zoomed-in visual documents.
+- Reduced reliance on the drag-to-reposition feature.
+- Faster access to different areas of a document during review or annotation.
+- Improved usability for complex or high-resolution files.
+
+**Example Use Case**
+
+An annotator working on a large scanned form needs to review content across multiple sections of the page. With the newly added scrollbars, the annotator can smoothly navigate to any part of the document using standard scrolling, making the review process more efficient.
+
+### Updated Zoom and Pan Controls for Visual Projects
+
+**What's Improved**
+
+The zoom in, zoom out, and move/pan controls in Visual Projects have been updated with clearer button designs, making them easier to discover and use when working with PDF and image-based documents.
+
+**Technical Details**
+
+The document viewer toolbar for Visual Projects has been enhanced with updated controls for zooming and repositioning content. These controls are now more clearly presented and consistently available when working with PDF and image documents. The underlying zoom and pan functionality remains unchanged, ensuring full backward compatibility with existing workflows.
+
+![Updated zoom and pan controls in the Visual NER document viewer toolbar](/assets/images/annotation_lab/7.8/4.png)
+*<center>The updated toolbar provides clearer zoom in, zoom out, and pan controls for Visual NER projects.</center>*
+
+**User Benefits**
+
+- Improved clarity and discoverability of zoom and move controls.
+- Smoother interaction when inspecting PDFs and image documents.
+- Reduced friction when switching between navigation actions.
+- Consistent viewing experience across Visual Projects.
+
+**Example Use Case**
+
+While reviewing a scanned PDF in a Visual Project, a user frequently zooms in to inspect fine details and repositions the document to continue annotation. With the updated controls, these actions are quicker and more intuitive, allowing the user to stay focused on the review task.
+
 
 ## Bug Fixes
 
-### Model & Training Issues
-- **Unable to Download Uploaded Models**
+### UI & User Experience
 
-  Fixed an issue that prevented users from downloading previously uploaded models. Users can now successfully download uploaded models without encountering any errors.
+- **Stable UI when renaming a service provider to a duplicate name**
 
-- **Transfer Learning Failure for `ner_biomarker_langtest`**
+  Previously, renaming a service provider to an already existing name could cause brief UI shifts or visual glitches during validation. The interface now remains stable and displays a clear toast error message when a duplicate name is detected.
 
-  Resolved an issue where transfer learning failed when using the `ner_biomarker_langtest` model with the Healthcare license and the Include Base Model Labels option enabled. Training and pre-annotation are now complete successfully in the latest version without errors.
+- **Comments no longer trigger a redirect to the error page**
 
-- **Unable to Deploy `distilbert_ner_distilbert_base_cased_finetuned_conll03_english` in Playground**  
+  Selecting Comments in the Annotation section could trigger an unintended redirect to a "Something went wrong" page. This has been corrected, and comments can now be accessed reliably.
 
-  Fixed an issue that prevented the deployment of the distilbert_ner_distilbert_base_cased_finetuned_conll03_english model in the Playground. The model can now be deployed and used successfully without any issues.
+- **Classification and comments now visible for previously annotated chunks**
 
-### UI / UX Fixes
+  In some of the previously configured projects, classifications and comments were not displayed correctly for already annotated chunks. This has been corrected.
 
-- **Models Hub Expands with Blank Area When Side Panel Is Minimized**
+  In addition, validation and UI behavior have been strengthened through improved project configuration enforcement:
 
-  Resolved an issue where the Models Hub expanded with a blank area when accessed from a minimized side panel. This behavior has been fixed for both the Models Hub and Settings views.
+  **Required Field Validation**
 
-- **Support for Longer Prompt Names with Truncation and Hover Preview**
+  - If a classification or NER field is configured as required, the UI now correctly enforces it.
+  - Required annotations now properly validate associated required fields, such as comments.
 
-  Improved prompt name handling to support longer names. Prompt names can now be saved with a maximum length of 100 characters. Long names are truncated with an ellipsis (`…`) where space is limited, and the full name is accessible via hover tooltip, ensuring no data loss.
+  **Conditional / Dependent Fields**
 
-- **Selecting Tasks Unbolds “Tags” Dropdown Text**
+  - Fields that depend on earlier selections are now enforced correctly.
+  - Follow-up fields become mandatory only when the preceding field is filled.
 
-  Fixed an issue where selecting tasks caused the “Tags” dropdown label to lose its bold styling. The label now remains consistently bold regardless of task selection state.
+- **Pagination now visible for long tasks in Comparison and De-Identification views**
 
-- **Full-Screen View Overlap in Individual Sections**
+   Under certain conditions, pagination controls were not visible for longer tasks in the Comparison view and were inconsistently displayed in the De-Identification view. Pagination is now consistently rendered and functions correctly in both views.
 
-  Resolved layout issues where the full-screen view overlapped with left-side sections and action buttons were misaligned or non-functional. The full-screen view is now clean, and the Save, Next, and Previous buttons are properly aligned and function as expected.
+- **Rating tooltips restored for configurations beyond 5 stars**
 
-- **Error When Editing or Cloning Predictions with Confidence Scores Enabled**
+   When Rate PDF projects were configured with more than five stars, rating tooltips were not displayed as expected. This has been corrected. New Rate PDF projects now default to a five-star configuration, ensuring consistent tooltip behavior.
 
-  Fixed an issue where users were redirected to a “`Something Went Wrong`” page when editing or cloning predictions in Visual NER projects with Show Confidence Score in Regions enabled. Predictions can now be edited or cloned successfully without any errors.
+- **Deploy button no longer flickers after re-deploying the pre-annotation server**
 
-### Project & Task Import/Export
-- **Zipped Audio and Video Files Not Imported**
+   A visual flicker could occur on the deploy/pre-annotation button after re-deploying the pre-annotation server in NER projects. The button now remains visually stable and accurately reflects the current deployment state.
 
-  Fixed an issue where ZIP files containing audio and video tasks were processed, but showed 0 tasks imported in the logs. Zipped audio and video files now import correctly, and all valid tasks within the ZIP are successfully processed.
+### Annotation, Models & Pre-Annotation
 
-- **First Attempt to Import Zipped Tasks from S3 with Session Token Fails**
+-  **Faster pre-annotation with combined NER models, rules, and prompts**
 
-  Resolved an issue where importing zipped tasks from S3 using a session token failed on the first attempt but succeeded on subsequent retries. The import now works reliably on the first attempt when using a session token.
+   Performance degradation was observed when running pre-annotation using a combination of NER models, rules, and prompts. Execution has been optimized and now processes tasks more efficiently.
 
-- **Unable to Import Tasks Exported with “Exclude Tasks Without Completions” in Visual NER Projects**
+-  **Multi-line annotation behavior corrected**
 
-  Fixed an issue where tasks exported using the Exclude tasks without completions option could not be re-imported into Visual NER projects. These exported tasks can now be imported successfully without errors.
+   In certain scenarios, multi-line annotations did not behave as expected. Automatic clicks no longer expand existing annotations incorrectly, and multiple selections no longer result in inactive grey/red regions.
 
-- **Drag-and-Drop Import Issues Causing Missing or Duplicate Imports**
+-  **Full span highlighting restored in PDF projects**
 
-  Addressed issues in the drag-and-drop import workflow where files were not imported via the confirmation pop-up and, in some cases, were imported multiple times after a single drop action. The drag-and-drop import now functions correctly, importing files only once and confirming successful uploads via the pop-up.
+   In PDF projects, annotations previously highlighted individual tokens rather than the full annotated span. Full spans are now highlighted correctly during annotation and review.
 
-- **Unable to Re-Import Tasks in Blind Evaluation Projects**
+-  **Pre-annotation server deployment fixed for checkbox and handwriting projects**
 
-  Fixed an issue where re-importing previously exported tasks in Blind Evaluation projects resulted in an internal server error. Users can now delete and re-import tasks without any issues.
+   Deployment failures could occur when starting pre-annotation servers for Checkbox Detection and Handwriting projects. Servers now deploy successfully and support pre-annotation as expected.
 
-### Analytics / Dashboard
-- **Incomplete Analytics Chart Data on Initial Load for Large Projects**
+-  **Task count now displayed on the Pre-Annotation button**
 
-  Resolved an issue where Analytics charts for large projects loaded partially on the first view during the backend processing. The Analytics page now displays a banner stating “`This page will be updated in a few minutes. Please wait to see the latest data…`” while data is loading, and automatically refreshes to display complete charts once processing is finished.
+   The Pre-Annotation button did not consistently display the number of tasks being processed during execution. Task count information is now shown correctly.
 
-- **Previous Project’s Analytics Briefly Displayed When Switching Projects**
+-  **Annotation no longer blocked in PDF+Text projects with "Label All Occurrences" enabled**
 
-  Fixed an issue where analytics data from a previously viewed project briefly appeared when switching between projects. Analytics now load cleanly for the selected project without showing outdated or incorrect data.
+   When the "Label All Occurrences" option was enabled, annotation actions could be blocked in PDF+Text projects. Annotation now functions correctly with this option enabled.
 
-### Annotation & Labeling
-- **Incorrect Display of Overlapping Annotations in HTML Projects**
+### PDF, OCR & Imports
 
-  Fixed an issue where labeled text was displayed incorrectly when annotations overlapped in HTML projects. Overlapping annotations now render with the correct label text and color, ensuring accurate visual representation.
+- **PDF files can no longer be imported into Audio and Video projects**
 
-- **Region Annotated Without Label When Selected Before Label in B-Box Projects**
+   The system previously allowed PDF files to be imported into Audio and Video project types. The OCR import option has been removed for these project types, preventing incompatible imports.
 
-  Resolved an issue where creating a bounding box by selecting the region before choosing a label resulted in unlabeled regions and annotation errors. Regions are now automatically associated with the selected label at the time of creation, providing consistent behavior similar to Visual NER projects.
+- **Cloud-based PDF import fixed for text-based projects**
 
-- **Unable to Modify Overlapping Labels in NER Project Tasks**
+   Importing PDF files from cloud sources in text-based projects could result in an unexpected "Something went wrong" error. Cloud-based PDF files can now be imported into NER projects without errors.
 
-  Fixed an issue that required users to delete overlapping annotations before modifying them. Users can now edit overlapping labels directly in NER project tasks without deleting existing annotations.
+- **Mixed PDFs (image + text) now supported in text-based projects**
 
-- **Annotations Reappear After Re-Import in Blind Evaluation Projects**
+   Mixed PDFs containing both image-based and text-based content could cause import failures in text-based projects. Mixed PDFs are now handled correctly.
 
-  Addressed an issue where previously deleted annotations reappeared when a task was deleted and re-imported in Blind Evaluation projects. Re-imported tasks now correctly appear as fresh, unannotated tasks.
+- **Cloud credentials properly saved during PDF import**
 
-- **Vertical Scrolling Not Working in De-Identification Compare View**
+   Cloud credentials provided during PDF import were not always saved or refreshed, resulting in outdated credentials being reused. Credentials are now saved and refreshed correctly.
 
-  Fixed an issue that prevented vertical scrolling in the De-Identification compare task view.  Users can now scroll through the full content, and the same fix applies to NER project types.
+- **OCR Server field now auto-refreshes on the Import page**
 
-### System Fixes
-- **User Redirected to Project Screen After Session Timeout and Refresh**
+   The OCR Server field on the Import page did not automatically refresh when the server became ready. The Import page now updates automatically to reflect server readiness.
 
-  Resolved an issue where refreshing the page after a session timeout redirected users to the Project screen, causing loss of context.  After re-authentication, users are now returned to the same screen they were previously working on.
+- **OCR document import restored for NER projects**
 
-- **Duplicate Default Names for Custom Service Providers in LLM Comparison Projects**
+   OCR documents could not be imported into NER projects under certain conditions. Both local and cloud imports now work as expected.
 
-  Fixed an issue where default names for custom service providers were duplicated when adding multiple providers. Default names now increment correctly, ensuring each provider has a unique name.
+### Analytics, Integrations & System Stability
 
-- **Internal Server Error When Switching Project Type After Importing Image B-Box Tasks**
+- **Annotator comparison chart fixed in Visual NER projects**
 
-  Resolved an issue where switching project types after importing Image B-Box tasks caused an internal server error due to processing mismatches.  Users can now switch to compatible image-based project types and open previously imported tasks without errors.
+   The annotator comparison chart did not consistently load or render data correctly in Visual NER projects. This has been resolved.
 
-- **Training Banner Not Showing Training Stages Consistently**
+- **Blind evaluation completions can no longer be edited without creating a new completion**
 
-  Fixed an issue where the training banner intermittently failed to display training stages after a training session started. The training information bar is now always visible and consistently shows the training stages.
+   Submitted completions in Blind Evaluation projects could be edited using keyboard shortcuts without creating a new completion. A new completion is now required before edits can be made.
 
-- **Project Permissions Removed After Export in Visual NER De-Identification Projects** 
+- **Concurrent imports prevented during active import operations**
 
-  Resolved an issue where exporting tasks removed user permissions in Visual NER De-Identification projects. Project permissions are now preserved after export, and users retain proper access rights.
+   Refreshing the page during an active import could allow additional imports to be initiated concurrently. Import actions now remain disabled until the current process completes.
+
+- **Chart update errors eliminated from system logs**
+
+   During Analytics Dashboard refresh operations, "Couldn't update chart" messages were observed in the pod logs. Chart data now updates correctly without generating errors.
+
+- **LLM responses now generated correctly with special characters in response names**
+
+   LLM responses failed to generate when response names contained supported special characters. This limitation has been removed.
+
+- **Deletion of integrated external service providers now properly restricted**
+
+   Integrated external service providers could previously be deleted without sufficient validation. Deletion behavior has been restricted to prevent unintended configuration loss.
+
+- **Synthetic task generation fixed for integrated LLM providers**
+
+   Synthetic task generation could fail when using integrated LLM providers. Synthetic tasks are now generated reliably across supported providers.
+
+-  **Stale "Cannot Delete Provider" message no longer persists on the Integration page**
+
+   The "Cannot Delete Provider" message could persist on the Integration page even when no deletion error was present. This message is no longer displayed incorrectly.
+
+-  **License validation no longer triggered after open-source training**
+
+   License-related errors appeared in training server logs after open-source model training completed. License validation is no longer triggered for open-source training workflows.
+
+-  **OIDC/SAML login restored after system restore**
+
+   After system restore, OIDC/SAML authentication could redirect users to profile update flows instead of completing login. Users are now logged in correctly after restore.
+
+-  **Cluster logs accessible without errors**
+
+   Accessing cluster logs could result in internal server errors under certain conditions. Cluster logs are now accessible reliably.
 
 ---
 
@@ -427,7 +425,8 @@ A project manager opens the Analytics Dashboard to assess annotation quality and
 </div>
 
 <ul class="pagination owl-carousel pagination_big">
-    <li class="active"><a href="annotation_labs_releases/release_notes_7_7">7.7</a></li>
+    <li class="active"><a href="annotation_labs_releases/release_notes_7_8">7.8</a></li>
+    <li><a href="annotation_labs_releases/release_notes_7_7">7.7</a></li>
     <li><a href="annotation_labs_releases/release_notes_7_5_1">7.6.0</a></li>
     <li><a href="annotation_labs_releases/release_notes_7_5_1">7.5.1</a></li>
     <li><a href="annotation_labs_releases/release_notes_7_5_0">7.5.0</a></li>
